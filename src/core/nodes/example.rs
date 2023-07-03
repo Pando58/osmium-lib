@@ -1,20 +1,10 @@
-use crate::{app::Osmium, core::NodeTrait, utils::AutoInc, OperationError};
+use crate::core::node::NodeClassManager;
 
 #[derive(Debug)]
 pub struct NodeExample {}
 
-impl NodeExample {
+impl NodeClassManager for NodeExample {
     fn new() -> Self {
         Self {}
-    }
-}
-
-impl NodeTrait for NodeExample {
-    fn create(app: &Osmium, graph_id: usize) -> Result<usize, OperationError> {
-        if let None = app.graphs.borrow().get(&graph_id) {
-            return Err(OperationError::NonExistentItem);
-        }
-
-        Ok(app.nodes.borrow_mut().push(Box::new(NodeExample::new())))
     }
 }

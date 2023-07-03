@@ -1,20 +1,36 @@
-use crate::{app::Osmium, core::nodes::NodeExample, OperationError};
+use crate::{app::Osmium, utils::AutoInc, OperationError};
 use std::fmt::Debug;
 
-pub trait NodeTrait: Debug {
-    fn create(app: &Osmium, graph_id: usize) -> Result<usize, OperationError>
+#[derive(Debug)]
+pub struct Node {
+    input_ids: Vec<usize>,
+    output_ids: Vec<usize>,
+    class_manager: Box<dyn NodeClassManager>,
+}
+
+impl Node {
+    fn new<T: NodeClassManager + 'static>() -> Self {
+        Self {
+            input_ids: Vec::new(),
+            output_ids: Vec::new(),
+            class_manager: Box::new(T::new()),
+        }
+    }
+
+    pub fn create<T: NodeClassManager + 'static>(
+        app: &Osmium,
+        graph_id: usize,
+    ) -> Result<usize, OperationError> {
+        if let None = app.graphs.borrow().get(&graph_id) {
+            return Err(OperationError::NonExistentItem);
+        }
+
+        Ok(app.nodes.borrow_mut().push(Node::new::<T>()))
+    }
+}
+
+pub trait NodeClassManager: Debug {
+    fn new() -> Self
     where
         Self: Sized;
-}
-
-pub enum Node {
-    Example,
-}
-
-pub fn create_node(app: &Osmium, graph_id: usize, class: Node) -> Result<usize, OperationError> {
-    use Node::*;
-
-    match class {
-        Example => NodeExample::create(app, graph_id),
-    }
 }
