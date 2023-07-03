@@ -1,9 +1,8 @@
+use crate::{app::Osmium, core::nodes::NodeExample, OperationError};
 use std::fmt::Debug;
 
-use crate::core::nodes::NodeExample;
-
 pub trait NodeTrait: Debug {
-    fn new() -> Self
+    fn create(app: &Osmium, graph_id: usize) -> Result<usize, OperationError>
     where
         Self: Sized;
 }
@@ -12,10 +11,10 @@ pub enum Node {
     Example,
 }
 
-pub fn new_node(variant: Node) -> impl NodeTrait {
+pub fn create_node(app: &Osmium, graph_id: usize, class: Node) -> Result<usize, OperationError> {
     use Node::*;
 
-    match variant {
-        Example => NodeExample::new(),
+    match class {
+        Example => NodeExample::create(app, graph_id),
     }
 }

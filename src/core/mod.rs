@@ -3,4 +3,4 @@ mod node;
 pub mod nodes;
 
 pub use graph::Graph;
-pub use node::{new_node, Node, NodeTrait};
+pub use node::{create_node, Node, NodeTrait};
