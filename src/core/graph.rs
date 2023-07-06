@@ -1,5 +1,9 @@
-use super::{nodes::NodeExample, Node};
-use crate::{app::Osmium, utils::AutoInc, OperationError};
+use crate::{
+    app::Osmium,
+    core::{nodes::Nodes, Node},
+    utils::AutoInc,
+    OperationError,
+};
 
 #[derive(Debug)]
 pub struct Graph {
@@ -13,18 +17,13 @@ impl Graph {
         }
     }
 
-    pub fn create(app: &Osmium) -> Result<(), OperationError> {
-        let graph_id = app.graphs.borrow_mut().push(Graph::new());
-        let my_node_id = Node::create::<NodeExample>(app, graph_id)?;
+    pub fn create(app: &mut Osmium) -> Result<(), OperationError> {
+        let graph_id = app.graphs.push(Graph::new());
+        let my_node_id = Node::create(app, Nodes::Example, graph_id)?;
 
-        let mut graphs = app.graphs.borrow_mut();
-        let graph = graphs.get_mut(&graph_id).unwrap();
+        let graph = app.graphs.get_mut(&graph_id).unwrap();
         graph.node_ids.push(my_node_id);
 
         Ok(())
-    }
-
-    pub fn step() -> i32 {
-        return 5;
     }
 }

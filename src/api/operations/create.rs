@@ -1,15 +1,15 @@
 use crate::{
     app::Osmium,
-    core::{Graph, Node, NodeClassManager},
+    core::{nodes::Nodes, Graph, Node},
     OperationError,
 };
 
 pub struct OpCreate<'a> {
-    app: &'a Osmium,
+    app: &'a mut Osmium,
 }
 
 impl<'a> OpCreate<'a> {
-    pub fn new(app: &'a Osmium) -> Self {
+    pub fn new(app: &'a mut Osmium) -> Self {
         Self { app }
     }
 
@@ -17,10 +17,7 @@ impl<'a> OpCreate<'a> {
         Graph::create(self.app)
     }
 
-    pub fn node<T: NodeClassManager + 'static>(
-        self,
-        graph_id: usize,
-    ) -> Result<(), OperationError> {
-        Node::create::<T>(self.app, graph_id).map(|_| ())
+    pub fn node(self, kind: Nodes, graph_id: usize) -> Result<(), OperationError> {
+        Node::create(self.app, kind, graph_id).map(|_| ())
     }
 }

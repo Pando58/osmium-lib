@@ -1,10 +1,18 @@
-use crate::core::node::NodeClassManager;
+use crate::{
+    app::Osmium,
+    core::{DataType, Input},
+    OperationError,
+};
 
-#[derive(Debug)]
-pub struct NodeExample {}
+pub struct NodeExample;
 
-impl NodeClassManager for NodeExample {
-    fn new() -> Self {
-        Self {}
+impl NodeExample {
+    pub fn create(app: &mut Osmium, node_id: usize) -> Result<(), OperationError> {
+        let my_input_id = Input::create(app, DataType::Integer, node_id)?;
+
+        let node = app.nodes.get_mut(&node_id).unwrap();
+        node.input_ids.push(my_input_id);
+
+        Ok(())
     }
 }

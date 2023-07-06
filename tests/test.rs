@@ -1,8 +1,8 @@
 #[test]
 fn test() {
-    let app = osmium::init();
+    let mut app = osmium::init();
 
-    let _ = osmium::api::query(&app).create().graph();
+    let _ = osmium::api::query(&mut app).create().graph();
 
     println!("{:?}", app);
 }
