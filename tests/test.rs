@@ -1,17 +1,17 @@
-use osmium::api::QueryParseError;
+use osmium::QueryParseError;
 
 #[test]
 fn test() {
     let mut app = osmium::init();
 
-    let _ = osmium::api::query(&mut app).create().graph();
+    let _ = osmium::query(&mut app).create().graph();
 
     println!("{:?}", app);
 }
 
 #[test]
 fn test_query_str() {
-    use osmium::api::query_str;
+    use osmium::query_str;
     use QueryParseError::*;
 
     let app = &mut osmium::init();
