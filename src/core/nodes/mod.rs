@@ -6,9 +6,12 @@ use crate::{
     utils::AutoInc,
     OperationError,
 };
+use strum_macros::EnumString;
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, EnumString, Debug)]
+#[strum(serialize_all = "snake_case")]
 pub enum Nodes {
+    // #[strum(disabled)]
     Example,
 }
 
