@@ -1,6 +1,8 @@
+mod operation_error;
 mod operations;
 mod query_parse_error;
 
+pub use operation_error::OperationError;
 pub use query_parse_error::QueryParseError;
 
 use self::operations::OpQuery;
