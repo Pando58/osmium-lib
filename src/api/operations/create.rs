@@ -1,5 +1,5 @@
 use crate::{
-    api::query_parse_error::QueryParseError,
+    api::{query_parse_error::QueryParseError, OperationResponse},
     app::Osmium,
     core::{nodes::Nodes, Graph, Node},
     OperationError,
@@ -15,15 +15,15 @@ impl<'a> OpCreate<'a> {
         Self { app }
     }
 
-    pub fn graph(self) -> Result<(), OperationError> {
+    pub fn graph(self) -> Result<OperationResponse, OperationError> {
         Graph::create(self.app)
     }
 
-    pub fn node(self, kind: Nodes, graph_id: usize) -> Result<(), OperationError> {
-        Node::create(self.app, kind, graph_id).map(|_| ())
+    pub fn node(self, kind: Nodes, graph_id: usize) -> Result<OperationResponse, OperationError> {
+        Node::create(self.app, kind, graph_id)
     }
 
-    pub fn query(self, mut args: SplitWhitespace) -> Result<(), QueryParseError> {
+    pub fn query(self, mut args: SplitWhitespace) -> Result<OperationResponse, QueryParseError> {
         match args.next() {
             Some("graph") => self
                 .graph()

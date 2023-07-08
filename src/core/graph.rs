@@ -1,4 +1,5 @@
 use crate::{
+    api::OperationResponse,
     app::Osmium,
     core::{nodes::Nodes, Node},
     utils::AutoInc,
@@ -17,13 +18,13 @@ impl Graph {
         }
     }
 
-    pub fn create(app: &mut Osmium) -> Result<(), OperationError> {
+    pub fn create(app: &mut Osmium) -> Result<OperationResponse, OperationError> {
         let graph_id = app.graphs.push(Graph::new());
-        let my_node_id = Node::create(app, Nodes::Example, graph_id)?;
+        let OperationResponse::Id(my_node_id) = Node::create(app, Nodes::Example, graph_id)? else { panic!() };
 
         let graph = app.graphs.get_mut(&graph_id).unwrap();
         graph.node_ids.push(my_node_id);
 
-        Ok(())
+        Ok(OperationResponse::Id(graph_id))
     }
 }

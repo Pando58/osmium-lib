@@ -1,4 +1,4 @@
-use crate::{app::Osmium, core::nodes::Nodes, OperationError};
+use crate::{api::OperationResponse, app::Osmium, core::nodes::Nodes, OperationError};
 use std::fmt::Debug;
 
 #[derive(Debug)]
@@ -17,13 +17,17 @@ impl Node {
         }
     }
 
-    pub fn create(app: &mut Osmium, kind: Nodes, graph_id: usize) -> Result<usize, OperationError> {
+    pub fn create(
+        app: &mut Osmium,
+        kind: Nodes,
+        graph_id: usize,
+    ) -> Result<OperationResponse, OperationError> {
         if let None = app.graphs.get(&graph_id) {
             return Err(OperationError::NonExistentItem);
         }
 
         let node_id = kind.create(app)?;
 
-        Ok(node_id)
+        Ok(OperationResponse::Id(node_id))
     }
 }

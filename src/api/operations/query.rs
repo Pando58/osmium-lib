@@ -1,5 +1,5 @@
 use crate::{
-    api::{operations::OpCreate, query_parse_error::QueryParseError},
+    api::{operations::OpCreate, query_parse_error::QueryParseError, OperationResponse},
     app::Osmium,
 };
 use std::str::SplitWhitespace;
@@ -17,7 +17,7 @@ impl<'a> OpQuery<'a> {
         OpCreate::new(self.app)
     }
 
-    pub fn query(self, mut args: SplitWhitespace) -> Result<(), QueryParseError> {
+    pub fn query(self, mut args: SplitWhitespace) -> Result<OperationResponse, QueryParseError> {
         match args.next() {
             Some("create") => self.create().query(args),
             Some(_) => Err(QueryParseError::UnknownOperation),
