@@ -5,4 +5,5 @@ mod init;
 pub mod utils;
 
 pub use api::{query, query_str, OperationError, OperationResponse, QueryParseError};
+pub use app::Osmium;
 pub use init::init;
