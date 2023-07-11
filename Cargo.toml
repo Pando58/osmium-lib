@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 strum = "0.25.0"
 strum_macros = "0.25.1"
+tokio = { version = "1.29.1", features = ["full"] }

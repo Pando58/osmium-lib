@@ -1,4 +1,4 @@
-use crate::{api::OperationResponse, app::Osmium, core::nodes::Nodes, OperationError};
+use crate::{api::OperationResponse, app::Osmium, core::nodes::Nodes, Event, OperationError};
 use std::fmt::Debug;
 
 #[derive(Debug)]
@@ -27,6 +27,8 @@ impl Node {
         }
 
         let node_id = kind.create(app)?;
+
+        app.emit(Event::NodesUpdated { graph_id });
 
         Ok(OperationResponse::Id(node_id))
     }

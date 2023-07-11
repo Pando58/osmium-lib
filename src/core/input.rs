@@ -1,4 +1,4 @@
-use crate::{app::Osmium, core::DataType, utils::AutoInc, OperationError};
+use crate::{app::Osmium, core::DataType, utils::AutoInc, Event, OperationError};
 
 #[derive(Debug)]
 pub struct Input {
@@ -24,6 +24,8 @@ impl Input {
         }
 
         let input_id = app.inputs.push(Input::new(datatype));
+
+        app.emit(Event::InputsUpdated { node_id });
 
         Ok(input_id)
     }

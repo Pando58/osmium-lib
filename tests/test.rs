@@ -35,3 +35,38 @@ fn test_query_str() {
 
     println!("{:?}", app);
 }
+
+#[tokio::test]
+async fn test_events() {
+    use osmium::core::nodes::Nodes;
+    use osmium::Event;
+
+    let mut app = osmium::init();
+
+    let mut rx = app.create_event_receiver();
+
+    let t = tokio::spawn(async move {
+        assert_eq!(
+            rx.recv().await.unwrap(),
+            Event::InputsUpdated { node_id: 0 }
+        );
+        assert_eq!(
+            rx.recv().await.unwrap(),
+            Event::NodesUpdated { graph_id: 0 }
+        );
+        assert_eq!(rx.recv().await.unwrap(), Event::GraphsUpdated);
+        assert_eq!(
+            rx.recv().await.unwrap(),
+            Event::InputsUpdated { node_id: 1 }
+        );
+        assert_eq!(
+            rx.recv().await.unwrap(),
+            Event::NodesUpdated { graph_id: 0 }
+        );
+    });
+
+    let _ = osmium::query(&mut app).create().graph();
+    let _ = osmium::query(&mut app).create().node(Nodes::Example, 0);
+
+    let _ = tokio::join!(t);
+}

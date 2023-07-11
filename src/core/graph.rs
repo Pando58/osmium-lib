@@ -3,7 +3,7 @@ use crate::{
     app::Osmium,
     core::{nodes::Nodes, Node},
     utils::AutoInc,
-    OperationError,
+    Event, OperationError,
 };
 
 #[derive(Debug)]
@@ -24,6 +24,8 @@ impl Graph {
 
         let graph = app.graphs.get_mut(&graph_id).unwrap();
         graph.node_ids.push(my_node_id);
+
+        app.emit(Event::GraphsUpdated);
 
         Ok(OperationResponse::Id(graph_id))
     }
